@@ -2,8 +2,19 @@
 
 Update this after every session: tick the phase, add the date, and write one line about what clicked (or didn't).
 
-**Current phase:** 0, How the web works
-**Backend language chosen:** _(Python/FastAPI or Java/Spring Boot, decide before P1)_
+**Current focus:** Keycloak course, [Module 01](keycloak/level-1-basics/01-what-is-keycloak.md)
+**Backend language:** Python (`uv`, FastAPI)
+
+## Keycloak course (first)
+
+| Level | Modules | Projects | Started | Finished |
+|---|---|---|---|---|
+| 1 Basics | 01–06 | KP1 | | |
+| 2 Apps | 07–12 | KP2–KP6 | | |
+| 3 Login experience | 13–15 | KP7–KP8 | | |
+| 4 Advanced | 16–22 | KP9–KP14 | | |
+
+## Full roadmap (after the course)
 
 | Phase | Topic | Started | Finished | Exit artifact |
 |---|---|---|---|---|
@@ -14,13 +25,13 @@ Update this after every session: tick the phase, add the date, and write one lin
 | 4 | Tokens & JWT | | | P7 |
 | 5 | OAuth 2.0 | | | P8, P9 |
 | 6 | OpenID Connect & SSO | | | P10 |
-| 7 | Keycloak | | | K1–K12, P11–P16 |
-| 8 | Auth0 & other providers | | | P17 |
-| 9 | Web application security | | | P18, P19 |
-| 10 | API & service-to-service | | | P20 |
-| 11 | Enterprise identity | | | P21 |
-| 12 | Security operations | | | P22 |
-| 13 | Capstones | | | P23 / P24 |
+| 7 | Keycloak | | | Keycloak course + KP1–KP12 |
+| 8 | Auth0 & other providers | | | P11 |
+| 9 | Web application security | | | P12, P13 |
+| 10 | API & service-to-service | | | P14 |
+| 11 | Enterprise identity | | | P15 |
+| 12 | Security operations | | | P16 |
+| 13 | Capstones | | | KP13 / KP14 |
 
 ## Session log
 

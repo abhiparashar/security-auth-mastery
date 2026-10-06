@@ -39,9 +39,9 @@ flowchart LR
 
 ## Start here
 
-1. **[`ROADMAP.md`](ROADMAP.md)**: the main document. 14 phases, each with plain-words explanations, a jargon table, "the one trap", and what you must build before moving on.
-2. **[`KEYCLOAK.md`](KEYCLOAK.md)**: Keycloak from scratch, hands-on. Every command in it was run against a real Keycloak 26.8.0 server, and the outputs are the real ones.
-3. **[`projects/README.md`](projects/README.md)**: 24 projects, from tiny to capstone, mapped to phases.
+1. **[`keycloak/README.md`](keycloak/README.md)**: **start here.** The Keycloak course, from basics to advanced, in 22 modules plus 14 Python projects. It teaches the background (tokens, OAuth, OIDC) as it goes.
+2. **[`ROADMAP.md`](ROADMAP.md)**: the full security roadmap. 14 phases, each with plain-words explanations, a jargon table, "the one trap", and what you must build before moving on.
+3. **[`projects/README.md`](projects/README.md)**: 16 projects for the general security phases (the Keycloak projects live in the course).
 4. **[`GLOSSARY.md`](GLOSSARY.md)**: every word and acronym in plain English.
 5. **[`LEARNING.md`](LEARNING.md)**: your progress tracker. Tick things off as you go.
 
@@ -66,10 +66,10 @@ flowchart LR
 
 ## How to use this repo
 
-- **Don't skip phases 0–6 to get to Keycloak faster.** Keycloak is just a tool that follows the rules from phases 4–6. If you know the rules, Keycloak is easy. If you don't, it's a screen full of confusing buttons.
+- **Order: Keycloak first, then the rest.** Your company runs Keycloak, so the [Keycloak course](keycloak/README.md) comes first and teaches just enough of phases 0–6 along the way. Afterwards, do phases 0–6 properly. They'll fill the gaps and make everything you did in Keycloak make deeper sense. Then go on to phases 8–13.
 - **Learn 1 hour, build 2 hours.** Reading about security without breaking and fixing things doesn't stick.
 - **Each phase ends with something you built.** No artifact, phase not done.
-- **Suggested pace:** 8–10 hours a week takes about **5–6 months** to finish. Phase 7 (Keycloak) is the biggest; give it 4–5 weeks.
+- **Suggested pace:** 8–10 hours a week. The Keycloak course takes about **11 weeks**; the full roadmap takes about **6–7 months**.
 
 ## Tools you will need
 
@@ -78,5 +78,5 @@ flowchart LR
 | A browser with DevTools (Chrome/Firefox) | To see every request, cookie, and header |
 | `curl` and `jq` | To send requests by hand and read JSON |
 | Docker | To run Keycloak, databases, and practice apps locally |
-| One backend language (Python/FastAPI or Java/Spring Boot) | To build the apps you will protect |
+| Python with `uv` (FastAPI for apps and APIs) | To build the apps you will protect |
 | [jwt.io](https://jwt.io) | To look inside tokens. Only paste practice tokens, never real ones |

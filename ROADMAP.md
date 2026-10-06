@@ -10,7 +10,7 @@ Every phase has the same shape:
 - **Exit artifact**: what you must build before moving on.
 - **Resources**: the best places to read more.
 
-Projects (`P1`, `P2`, ...) are described in [`projects/README.md`](projects/README.md).
+Projects (`P1`, `P2`, ...) are described in [`projects/README.md`](projects/README.md). Keycloak projects (`KP1`, ...) and the capstones are in [`keycloak/PROJECTS.md`](keycloak/PROJECTS.md).
 
 ---
 
@@ -378,7 +378,7 @@ flowchart LR
 
 **In plain words:** Keycloak is a free, open-source **identity provider**: a ready-made front desk that does everything from phases 2–6 for you: login pages, password storage, MFA, sessions, OAuth 2.0, OpenID Connect, SAML, SSO, roles, and "Log in with Google." Your apps stop handling passwords at all. They send users to Keycloak and trust the tokens it hands back.
 
-> **Hands-on guide:** [`KEYCLOAK.md`](KEYCLOAK.md) walks you through it step by step, with real commands and real outputs.
+> **Hands-on course:** [`keycloak/README.md`](keycloak/README.md) teaches all of this in 22 modules, basics to advanced, with Python apps and real commands and outputs.
 
 ```mermaid
 flowchart TB
@@ -465,7 +465,7 @@ flowchart TB
 
 **The one trap:** Keycloak sets the token's `iss` (issuer) from **the URL you used to reach it**. If your app reaches Keycloak as `http://keycloak:8080` (inside Docker) but the browser uses `http://localhost:8180`, the tokens won't match and validation fails with confusing errors. Set the **hostname** option correctly, and know which URL each part of your system uses.
 
-**Exit artifact:** P11–P16 (see projects). At minimum: a web app plus an API, both protected by Keycloak, with roles checked on the API, and your realm exported as JSON in git.
+**Exit artifact:** KP1–KP12 in [`keycloak/PROJECTS.md`](keycloak/PROJECTS.md). At minimum: a web app plus an API, both protected by Keycloak, with roles checked on the API, and your realm in git.
 
 **Resources:**
 - [Keycloak Getting Started (Docker)](https://www.keycloak.org/getting-started/getting-started-docker)
@@ -503,7 +503,7 @@ flowchart TB
 
 **The one trap:** Thinking "we use Auth0, so we're secure." The provider secures the *login*. **Your API still has to validate tokens correctly and check permissions.** Most breaches happen in your code, not theirs.
 
-**Exit artifact:** P17. Move your Keycloak-protected app to Auth0, changing only configuration.
+**Exit artifact:** P11. Move your Keycloak-protected app to Auth0, changing only configuration.
 
 **Resources:**
 - [Auth0 docs: Get Started](https://auth0.com/docs/get-started)
@@ -546,7 +546,7 @@ flowchart TB
 
 **The one trap:** **CORS does not protect your API.** It only stops *browsers* from letting other websites' JavaScript read responses. `curl`, Postman, and attackers' scripts ignore CORS completely. Your API still needs authentication.
 
-**Exit artifact:** P18 (hack OWASP Juice Shop, with write-ups) and P19 (security-review and fix your own earlier projects).
+**Exit artifact:** P12 (hack OWASP Juice Shop, with write-ups) and P13 (security-review and fix your own earlier projects).
 
 **Resources:**
 - [PortSwigger Web Security Academy](https://portswigger.net/web-security): free, and the best hands-on labs available
@@ -587,7 +587,7 @@ flowchart TB
 
 **The one trap:** "It's an internal service, so it doesn't need authentication." Once an attacker gets into *one* machine, every unprotected internal API is wide open. That's how small breaches become huge ones.
 
-**Exit artifact:** P20. A three-service chain secured with Keycloak service accounts, with each service checking audience and roles.
+**Exit artifact:** P14. A three-service chain secured with Keycloak service accounts, with each service checking audience and roles.
 
 **Resources:**
 - [OWASP API Security Top 10](https://owasp.org/www-project-api-security/)
@@ -625,7 +625,7 @@ flowchart TB
 
 **The one trap:** Forgetting **de-provisioning**. When someone leaves, disabling them in AD doesn't help if an app has its own copy of the account or a long-lived offline token. Leavers with live access are a top audit finding.
 
-**Exit artifact:** P21. Keycloak federating users from an OpenLDAP container, plus one SAML app.
+**Exit artifact:** P15. Keycloak federating users from an OpenLDAP container, plus one SAML app.
 
 **Resources:**
 - [Keycloak: User federation (LDAP)](https://www.keycloak.org/docs/latest/server_admin/#_ldap)
@@ -663,7 +663,7 @@ flowchart TB
 
 **The one trap:** Logging tokens. An access token in a log file is a working key for anyone who can read the logs. Log the token's `sub` and `jti`, never the token itself.
 
-**Exit artifact:** P22. A threat model document plus an alert that fires on brute-force login attempts in Keycloak.
+**Exit artifact:** P16. A threat model document plus an alert that fires on brute-force login attempts in Keycloak.
 
 **Resources:**
 - [OWASP Threat Modeling Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html)
@@ -675,9 +675,9 @@ flowchart TB
 
 ## Phase 13: Capstones (3–4 weeks)
 
-Pick at least one. See P23 and P24 in [`projects/README.md`](projects/README.md).
+Pick at least one. Both are in [`keycloak/PROJECTS.md`](keycloak/PROJECTS.md).
 
-- **P23: Company identity platform.** Keycloak in production mode with PostgreSQL, TLS, a reverse proxy, LDAP federation, Google login, MFA, a themed login page, three apps (web, API, batch job), realm config in git, and a runbook.
-- **P24: Break it and fix it.** Build a deliberately vulnerable OAuth/OIDC app with 8+ real-world mistakes, write the exploits, then fix each one, with before/after evidence.
+- **KP13: Company identity platform.** Keycloak in production mode with PostgreSQL, TLS, a reverse proxy, LDAP federation, MFA, a themed login page, a gateway plus three Python services, a web app and a batch job, realm config in git, event alerts, and a runbook.
+- **KP14: Break it and fix it.** Ten real-world Keycloak/OAuth mistakes, an exploit for each, then a fix for each, with before/after evidence.
 
-When you can explain every step of P23 to a colleague, *including every claim in every token*, you've mastered this roadmap.
+When you can explain every step of KP13 to a colleague, *including every claim in every token*, you've mastered this roadmap.

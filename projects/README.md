@@ -1,9 +1,9 @@
 # Projects
 
-24 projects, smallest to biggest. Nothing is pre-built: **you build every one.**
+16 projects for the general security phases, smallest to biggest. **Keycloak (phase 7) and the capstones (phase 13) have their own 14 projects in [`../keycloak/PROJECTS.md`](../keycloak/PROJECTS.md).** Nothing is pre-built: **you build every one.**
 
 **Rules:**
-- Pick **one** backend language and stick with it. Good choices: **Python + FastAPI** (fast to write) or **Java + Spring Boot** (most common with Keycloak at companies).
+- Language: **Python** (FastAPI for web apps and APIs, `uv` for projects). The security ideas are the same in any language; only the libraries change.
 - Each project lives in its own folder here (`projects/p01-http-explorer/`, ...) with a short `NOTES.md`: what you built, what broke, what you learned.
 - **"Done when"** is the finish line. If you can't show it, the project isn't done.
 - After building, always **attack your own project** (wrong token, expired token, other user's ID, no token) and write down what happened.
@@ -71,84 +71,49 @@ Two separate apps (different ports) that both log in through one OIDC provider.
 
 ## Phase 7: Keycloak (the core of this repo)
 
-Do [`KEYCLOAK.md`](../KEYCLOAK.md) lessons K1–K12 first.
-
-### P11: Keycloak in Docker Compose (S)
-Keycloak + PostgreSQL in `docker-compose.yml`, with your realm auto-imported from JSON at startup.
-- **Done when:** `docker compose down -v && docker compose up` gives you the same realm, clients, and roles every time, with zero clicking.
-
-### P12: Protect a web app (M)
-A web app that logs users in via Keycloak (Authorization Code + PKCE) using a standard OIDC library. Show the user's name and roles. Add logout.
-- **Done when:** login, logout, and an expired session all behave correctly; a user without the `app-user` role sees a "not allowed" page.
-
-### P13: Protect an API (M)
-An `orders-api` that accepts **only** access tokens from Keycloak. Validate signature (via JWKS), `exp`, `iss`, and `aud`. `GET /orders` needs role `orders:read`; `POST /orders` needs `orders:write` (client roles).
-- **Done when:** a test script proves 401 for no/expired/forged tokens, 401 for a token whose `aud` isn't `orders-api`, 403 for a missing role, and 200 otherwise. The web app from P12 calls this API.
-
-### P14: Groups, MFA, and the login experience (M)
-Create groups (`finance`, `engineering`) that carry roles. Require OTP for the `finance` group only (conditional authentication flow). Set a password policy and turn on brute-force detection. Apply a simple custom login theme.
-- **Done when:** a finance user is forced to set up OTP and an engineering user isn't; 5 wrong passwords temporarily lock the account; the login page shows your logo.
-
-### P15: Identity brokering and federation (M)
-Add "Log in with GitHub/Google" to the realm. Run an OpenLDAP container and federate its users into Keycloak.
-- **Done when:** an LDAP user and a GitHub user can both log into P12, and you can explain where each user's password actually lives.
-
-### P16: Keycloak as code (M)
-Automate the whole realm (clients, roles, groups, mappers, flows) with `kcadm.sh` scripts, a realm JSON import, or Terraform's Keycloak provider. Add a CI step that spins it up and runs P13's test script.
-- **Done when:** a fresh environment is rebuilt from git in one command, and the API tests pass against it.
+Follow the [Keycloak course](../keycloak/README.md) and its projects **KP1–KP12** in [`../keycloak/PROJECTS.md`](../keycloak/PROJECTS.md).
 
 ---
 
 ## Phase 8: Auth0
 
-### P17: Same app, different provider (S–M)
-Point P12 + P13 at an Auth0 free tenant instead of Keycloak.
+### P11: Same app, different provider (S–M)
+Point the web app and API from KP4 at an Auth0 free tenant instead of Keycloak.
 - **Done when:** only configuration changed (show the diff), and `NOTES.md` has a Keycloak ↔ Auth0 comparison: concepts, cost, effort, and where each would fit at your company.
 
 ---
 
 ## Phase 9: Attacks
 
-### P18: Hack OWASP Juice Shop (L)
+### P12: Hack OWASP Juice Shop (L)
 Run Juice Shop in Docker and solve 15+ challenges across injection, XSS, broken access control, and broken authentication. Finish at least 20 PortSwigger Web Security Academy labs (do the JWT and OAuth topics).
 - **Done when:** each challenge has a short write-up: what you did, why it worked, and how to fix it.
 
-### P19: Security review of your own work (M)
-Review P4–P13 with the OWASP ASVS (Level 1) checklist. Add security headers, CSRF protection, input validation, and dependency scanning.
+### P13: Security review of your own work (M)
+Review P4–P10 and KP3–KP4 with the OWASP ASVS (Level 1) checklist. Add security headers, CSRF protection, input validation, and dependency scanning.
 - **Done when:** a findings table (issue → severity → fix → commit link), and every high-severity issue is fixed.
 
 ---
 
 ## Phase 10–12: Services, enterprise, operations
 
-### P20: Secure service chain (L, phase 10)
+### P14: Secure service chain (L, phase 10)
 `gateway → orders → payments`. A user calls the gateway; `orders` calls `payments` on the user's behalf using **token exchange** (or a service account where no user context is needed). Each service checks audience and roles. Put secrets in Vault (dev mode is fine).
 - **Done when:** `payments` rejects a token meant for `orders`; no secret appears in git or logs; a diagram shows which token travels on which hop.
 
-### P21: Enterprise bridge (M, phase 11)
+### P15: Enterprise bridge (M, phase 11)
 Keycloak federating users from LDAP, with one OIDC app and one SAML app (e.g. a SAML test SP) both using SSO.
 - **Done when:** one LDAP login gets you into both apps; disabling the user in LDAP blocks the next login; you can read and explain a SAML assertion.
 
-### P22: Threat model and alerting (M, phase 12)
-Write a STRIDE threat model for P20. Turn on Keycloak login and admin events and ship them somewhere searchable (e.g. Loki/Grafana or OpenSearch). Alert on brute-force attempts and on admin role changes.
+### P16: Threat model and alerting (M, phase 12)
+Write a STRIDE threat model for P14. Turn on Keycloak login and admin events and ship them somewhere searchable (e.g. Loki/Grafana or OpenSearch). Alert on brute-force attempts and on admin role changes.
 - **Done when:** a scripted brute-force attempt triggers your alert, and the threat model lists 10+ threats with their mitigations.
 
 ---
 
 ## Phase 13: Capstones
 
-### P23: Company identity platform (XL)
-Everything together, run like real production:
-- Keycloak in **production mode** (`start`), PostgreSQL, TLS, behind a reverse proxy, two nodes
-- LDAP federation, Google/GitHub brokering, MFA for privileged groups, branded theme
-- Three clients: web app (P12), API (P13), batch job (service account)
-- Realm fully in git (P16), CI pipeline, health and metrics dashboards, login-event alerts (P22)
-- A **runbook**: how to add a new app, rotate realm keys, rotate client secrets, upgrade Keycloak, and restore from backup
-- **Done when:** a colleague can onboard a new app using only your runbook, and you can explain every claim in every token your system issues.
-
-### P24: Break it, then fix it (L)
-Build a deliberately vulnerable OAuth/OIDC app with 8+ real-world mistakes: no `state`, no PKCE, wildcard redirect URI, ID token sent to the API, no `aud` check, tokens in `localStorage` + an XSS bug, logged tokens, long-lived tokens with no revocation. Write an exploit for each, then fix each one.
-- **Done when:** for every bug there's an exploit script that works on the `vulnerable` branch and fails on the `fixed` branch.
+The capstones are Keycloak-based, so they live in the Keycloak course: **KP13: Company identity platform** and **KP14: Break it, then fix it** in [`../keycloak/PROJECTS.md`](../keycloak/PROJECTS.md).
 
 ---
 
@@ -166,17 +131,11 @@ Build a deliberately vulnerable OAuth/OIDC app with 8+ real-world mistakes: no `
 | P8 | Login with GitHub, by hand | 5 | ⬜ |
 | P9 | Two services, client credentials | 5 | ⬜ |
 | P10 | SSO across two apps | 6 | ⬜ |
-| P11 | Keycloak in Docker Compose | 7 | ⬜ |
-| P12 | Protect a web app | 7 | ⬜ |
-| P13 | Protect an API | 7 | ⬜ |
-| P14 | Groups, MFA, login experience | 7 | ⬜ |
-| P15 | Identity brokering and federation | 7 | ⬜ |
-| P16 | Keycloak as code | 7 | ⬜ |
-| P17 | Same app, Auth0 | 8 | ⬜ |
-| P18 | Hack OWASP Juice Shop | 9 | ⬜ |
-| P19 | Security review of your own work | 9 | ⬜ |
-| P20 | Secure service chain | 10 | ⬜ |
-| P21 | Enterprise bridge | 11 | ⬜ |
-| P22 | Threat model and alerting | 12 | ⬜ |
-| P23 | Company identity platform | 13 | ⬜ |
-| P24 | Break it, then fix it | 13 | ⬜ |
+| KP1–KP12 | [Keycloak course projects](../keycloak/PROJECTS.md) | 7 | ⬜ |
+| P11 | Same app, Auth0 | 8 | ⬜ |
+| P12 | Hack OWASP Juice Shop | 9 | ⬜ |
+| P13 | Security review of your own work | 9 | ⬜ |
+| P14 | Secure service chain | 10 | ⬜ |
+| P15 | Enterprise bridge | 11 | ⬜ |
+| P16 | Threat model and alerting | 12 | ⬜ |
+| KP13–KP14 | [Capstones](../keycloak/PROJECTS.md) | 13 | ⬜ |
